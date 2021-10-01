@@ -21,10 +21,10 @@ all : $(OBJDIR) $(NAME)
 $(OBJDIR) :
 	mkdir -p objs
 
-$(OBJDIR)%.o : $(SRCDIR)%.c
+$(OBJDIR)%.o : $(SRCDIR)%.c $(HEADER)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(NAME) : $(OBJS) $(HEADER)
+$(NAME) : $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
 clean :
