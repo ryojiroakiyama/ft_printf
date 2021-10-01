@@ -1,35 +1,38 @@
 NAME = libftprintf.a
 
-HEADER_DIR = ./includes
+HEADER_DIR = ./includes/
 HEADER_NAME = ft_printf.h
-HEADER = ${addprefix ${HEADER_DIR}/, ${HEADER_NAME}}
+HEADER = $(addprefix $(HEADER_DIR), $(HEADER_NAME))
 
-SRCS_DIR = ./srcs
-SRCS_NAME = start.c \
-			pretreat_to_put.c \
-			put.c \
-			utils.c
-SRCS = ${addprefix ${SRCS_DIR}/, ${SRCS_NAME}}
+SRCDIR = ./srcs/
+SRCS = start.c \
+		pretreat_to_put.c \
+		put.c \
+		utils.c
+
+OBJDIR = ./objs/
+OBJS = $(SRCS:%.c=$(OBJDIR)%.o)
 
 CC = gcc
+CFLAGS = -Wall -Werror -Wextra -I$(HEADER_DIR)
 
-CFLAGS = -Wall -Wextra -Werror -I${HEADER_DIR}
+all : $(OBJDIR) $(NAME)
 
-RM = rm -f
+$(OBJDIR) :
+	mkdir -p objs
 
-OBJS = ${SRCS:.c=.o}
+$(OBJDIR)%.o : $(SRCDIR)%.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-${NAME}: ${OBJS} ${HEADER}
-	ar rcs ${NAME} ${OBJS}
+$(NAME) : $(OBJS) $(HEADER)
+	ar rcs $(NAME) $(OBJS)
 
-all: ${NAME}
+clean :
+	rm -rf $(OBJS)
 
-clean:
-	${RM} ${OBJS}
+fclean : clean
+	rm -f $(NAME)
 
-fclean: clean
-	${RM} ${NAME}
+re : fclean all
 
-re: fclean all
-
-.PHONY: all clean fclean re
+.PHONY: all fclean clean re
