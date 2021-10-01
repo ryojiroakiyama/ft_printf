@@ -11,4 +11,4 @@ ft_printf function program that reproduces libc's printf function.
 # Usage  
 Type "make" in this repository.  
 Then, the library libftprintf.a will be created.  
-You can use ft_printf by including ft_printf.h and compiling with libftprintf.a together.
+You can use ft_printf by including ft_printf.h and compiling your code with libftprintf.a.
