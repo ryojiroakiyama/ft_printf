@@ -1,27 +1,31 @@
 NAME = libftprintf.a
 
-SRCS = ./start.c ./pretreat_to_put.c ./put.c ./utils.c
+HEADER_DIR = ./includes
+HEADER_NAME = ft_printf.h
+HEADER = ${addprefix ${HEADER_DIR}/, ${HEADER_NAME}}
 
-HEADER = ft_printf.h
+SRCS_DIR = ./srcs
+SRCS_NAME = start.c \
+			pretreat_to_put.c \
+			put.c \
+			utils.c
+SRCS = ${addprefix ${SRCS_DIR}/, ${SRCS_NAME}}
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I${HEADER_DIR}
 
 RM = rm -f
 
 OBJS = ${SRCS:.c=.o}
 
-%.o: %.c ${HEADER}
-	${CC} ${CFLAGS} -c $< -o $@
-
-${NAME}: ${OBJS}
+${NAME}: ${OBJS} ${HEADER}
 	ar rcs ${NAME} ${OBJS}
 
 all: ${NAME}
 
 clean:
-	${RM} ${OBJS} ${B_OBJS}
+	${RM} ${OBJS}
 
 fclean: clean
 	${RM} ${NAME}
