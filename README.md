@@ -3,7 +3,7 @@ ft_printf function that reproduces libc's printf function.
 - Interpret the following format  
 `%[flags][minimum field width].[precision][conversion specifier]`  
     - flags  
-    '-0.'
+    '-0'
     - conversion specifier  
     'cspdiuxX%'
 
