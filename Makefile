@@ -1,6 +1,6 @@
 NAME = libftprintf.a
 
-SRCS = ./input.c ./pretreat_to_put.c ./put.c ./utils.c
+SRCS = ./start.c ./pretreat_to_put.c ./put.c ./utils.c
 
 HEADER = ft_printf.h
 

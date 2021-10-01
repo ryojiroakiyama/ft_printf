@@ -2,22 +2,22 @@
 
 void	put_arg(t_store *store, va_list *ap)
 {
-	void	(*f[SPEC_NUM])(t_store *, va_list *, void (*g[])(t_store *, char));
-	void	(*g[FLAG_NUM])(t_store *, char);
+	void	(*route[SPEC_NUM])(t_store *, va_list *, void (*put[])(t_store *, char));
+	void	(*put[FLAG_NUM])(t_store *, char);
 
-	f[SPEC_C] = route_c;
-	f[SPEC_S] = route_s;
-	f[SPEC_P] = route_num1;
-	f[SPEC_D] = route_num1;
-	f[SPEC_I] = route_num1;
-	f[SPEC_U] = route_num1;
-	f[SPEC_SX] = route_num1;
-	f[SPEC_LX] = route_num1;
-	f[SPEC_PER] = route_c;
-	g[NON] = put_flag_n;
-	g[HYPHEN] = put_flag_h;
-	g[ZERO] = put_flag_z;
-	f[store->spec](store, ap, g);
+	route[SPEC_C] = route_char;
+	route[SPEC_S] = route_str;
+	route[SPEC_P] = route_num;
+	route[SPEC_D] = route_num;
+	route[SPEC_I] = route_num;
+	route[SPEC_U] = route_num;
+	route[SPEC_SX] = route_num;
+	route[SPEC_LX] = route_num;
+	route[SPEC_PER] = route_char;
+	put[NON] = put_flag_non;
+	put[HYPHEN] = put_flag_hyphen;
+	put[ZERO] = put_flag_zero;
+	route[store->spec](store, ap, put);
 }
 
 void	setstore_width(t_store *store, const char *fmt, size_t *i, va_list *ap)
@@ -47,7 +47,7 @@ void	setstore_width(t_store *store, const char *fmt, size_t *i, va_list *ap)
 	}
 }
 
-void	setstore_prec(t_store *store, const char *fmt, size_t *i, va_list *ap)
+void	setstore_precision(t_store *store, const char *fmt, size_t *i, va_list *ap)
 {
 	int	nb;
 
@@ -76,11 +76,11 @@ void	setstore_prec(t_store *store, const char *fmt, size_t *i, va_list *ap)
 		store->prec = DOT_ONLY;
 }
 
-int	per_section(const char *fmt, size_t *i, va_list *ap)
+int	percent_appeared(const char *fmt, size_t *i, va_list *ap)
 {
 	t_store	store;
 
-	ft_storenew_init(&store);
+	initialize_store(&store);
 	(*i)++;
 	while (fmt[*i] == '0')
 	{
@@ -93,37 +93,37 @@ int	per_section(const char *fmt, size_t *i, va_list *ap)
 		(*i)++;
 	}
 	setstore_width(&store, fmt, i, ap);
-	setstore_prec(&store, fmt, i, ap);
-	store.spec = ft_isspec(fmt[*i]);
+	setstore_precision(&store, fmt, i, ap);
+	store.spec = is_specifier(fmt[*i]);
 	if (store.spec == -1)
 		return (-1);
 	put_arg(&store, ap);
 	return (store.putnum);
-}	
+}
 
 int	ft_printf(const char *fmt, ...)
 {
 	va_list		ap;
 	size_t		i;
-	int			sum;
+	int			put_num;
 	int			ret;
 
 	i = 0;
-	sum = 0;
+	put_num = 0;
 	va_start(ap, fmt);
 	while (fmt[i])
 	{
 		if (fmt[i] == '%')
-			ret = per_section(fmt, &i, &ap);
+			ret = percent_appeared(fmt, &i, &ap);
 		else
 			ret = write(1, &fmt[i], 1);
 		if (ret == -1)
 			break ;
-		sum += ret;
+		put_num += ret;
 		i++;
 	}
 	va_end(ap);
 	if (ret == -1)
 		return (-1);
-	return (sum);
+	return (put_num);
 }

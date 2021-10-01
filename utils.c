@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	ft_storenew_init(t_store *t)
+void	initialize_store(t_store *t)
 {
 	t->flag = NON;
 	t->width = INIT;
@@ -13,7 +13,7 @@ void	ft_storenew_init(t_store *t)
 	t->prefix = "";
 }
 
-int	ft_isspec(char c)
+int	is_specifier(char c)
 {
 	int		i;
 	char	*specs;

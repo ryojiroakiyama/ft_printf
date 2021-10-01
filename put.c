@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	put_flag_h(t_store *store, char c)
+void	put_flag_hyphen(t_store *store, char c)
 {
 	while (*(store->prefix))
 	{
@@ -24,7 +24,7 @@ void	put_flag_h(t_store *store, char c)
 	}
 }
 
-void	put_flag_z(t_store *store, char c)
+void	put_flag_zero(t_store *store, char c)
 {
 	while (*(store->prefix))
 	{
@@ -43,7 +43,7 @@ void	put_flag_z(t_store *store, char c)
 	}
 }
 
-void	put_flag_n(t_store *store, char c)
+void	put_flag_non(t_store *store, char c)
 {
 	while (store->blank)
 	{

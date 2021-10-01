@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-void	route_c(t_store *store, va_list *ap, void (*g[])(t_store *, char))
+void	route_char(t_store *store, va_list *ap, void (*put[])(t_store *, char))
 {
 	unsigned char	c;
 
@@ -11,10 +11,10 @@ void	route_c(t_store *store, va_list *ap, void (*g[])(t_store *, char))
 	store->body = 1;
 	if (store->body < store->width)
 		store->blank = store->width - store->body;
-	g[store->flag](store, c);
+	put[store->flag](store, c);
 }
 
-void	route_s(t_store *store, va_list *ap, void (*g[])(t_store *, char))
+void	route_str(t_store *store, va_list *ap, void (*put[])(t_store *, char))
 {
 	char	*str;
 
@@ -27,27 +27,15 @@ void	route_s(t_store *store, va_list *ap, void (*g[])(t_store *, char))
 	if (store->body < store->width)
 		store->blank = store->width - store->body;
 	if (store->body == 0)
-		g[store->flag](store, 0);
+		put[store->flag](store, 0);
 	while (store->body)
 	{
-		g[store->flag](store, *str);
+		put[store->flag](store, *str);
 		str++;
 	}
 }
 
-void	route_num2(unsigned long long nb,
-			t_store *store, void (*g[])(t_store *, char))
-{
-	if (nb >= (unsigned long long)store->base)
-	{
-		route_num2(nb / store->base, store, g);
-		route_num2(nb % store->base, store, g);
-	}
-	else
-		g[store->flag](store, store->basestr[nb]);
-}
-
-void	setstore_various(t_store *store, unsigned long long nb)
+static void	setstore_numdata(t_store *store, unsigned long long nb)
 {
 	if (store->spec == SPEC_D || store->spec == SPEC_I || store->spec == SPEC_U)
 	{
@@ -70,7 +58,19 @@ void	setstore_various(t_store *store, unsigned long long nb)
 		store->prefix = "0x";
 }
 
-void	route_num1(t_store *store, va_list *ap, void (*g[])(t_store *, char))
+static void	put_num_recursive(unsigned long long nb,
+			t_store *store, void (*put[])(t_store *, char))
+{
+	if (nb >= (unsigned long long)store->base)
+	{
+		put_num_recursive(nb / store->base, store, put);
+		put_num_recursive(nb % store->base, store, put);
+	}
+	else
+		put[store->flag](store, store->basestr[nb]);
+}
+
+void	route_num(t_store *store, va_list *ap, void (*put[])(t_store *, char))
 {
 	unsigned long long	nb;
 	long				tmp_nb;
@@ -90,11 +90,11 @@ void	route_num1(t_store *store, va_list *ap, void (*g[])(t_store *, char))
 		nb = (unsigned int)va_arg(*ap, unsigned int);
 	if (store->spec == SPEC_P)
 		nb = (unsigned long long)va_arg(*ap, unsigned long long);
-	setstore_various(store, nb);
+	setstore_numdata(store, nb);
 	if (store->body < store->prec)
 		store->zero = store->prec - store->body;
 	tmp_len = ft_strnlen(store->prefix, -1) + store->body + store->zero;
 	if (tmp_len < store->width)
 		store->blank = store->width - (tmp_len);
-	route_num2(nb, store, g);
+	put_num_recursive(nb, store, put);
 }
