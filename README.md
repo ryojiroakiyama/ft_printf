@@ -1,6 +1,7 @@
 # Description
-ft_printf function that reproduces libc's printf function.
-- Interpret the following format  
+ft_printf function program that reproduces libc's printf function.  
+`int		ft_printf(const char *fmt, ...);`
+- Interpret the following format　(fmt in the prototype shown above).  
 `%[flags][minimum field width].[precision][conversion specifier]`  
     - flags  
     '-0'
