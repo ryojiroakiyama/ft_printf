@@ -1,5 +1,5 @@
 # Description
-ft_printf function program that reproduces libc's printf function.  
+This is a ft_printf program that reproduces libc's printf function.  
 `int	ft_printf(const char *format, ...);`
 - Interpret the following format rules.  
 `%[flags][minimum field width].[precision][conversion specifier]`  
