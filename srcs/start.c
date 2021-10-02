@@ -20,12 +20,12 @@ void	put_arg(t_store *store, va_list *ap)
 	route[store->spec](store, ap, put);
 }
 
-void	setstore_width(t_store *store, const char *fmt, size_t *i, va_list *ap)
+void	setstore_width(t_store *store, const char *format, size_t *i, va_list *ap)
 {
 	int	nb;
 
 	nb = 0;
-	if (fmt[*i] == '*')
+	if (format[*i] == '*')
 	{
 		nb = (int)va_arg(*ap, int);
 		if (nb < 0)
@@ -36,26 +36,26 @@ void	setstore_width(t_store *store, const char *fmt, size_t *i, va_list *ap)
 		store->width = nb;
 		(*i)++;
 	}
-	else if ('1' <= fmt[*i] && fmt[*i] <= '9')
+	else if ('1' <= format[*i] && format[*i] <= '9')
 	{
-		while ('0' <= fmt[*i] && fmt[*i] <= '9')
+		while ('0' <= format[*i] && format[*i] <= '9')
 		{
-			nb = nb * 10 + (fmt[*i] - '0');
+			nb = nb * 10 + (format[*i] - '0');
 			(*i)++;
 		}
 		store->width = nb;
 	}
 }
 
-void	setstore_precision(t_store *store, const char *fmt, size_t *i, va_list *ap)
+void	setstore_precision(t_store *store, const char *format, size_t *i, va_list *ap)
 {
 	int	nb;
 
 	nb = 0;
-	if (fmt[*i] != '.')
+	if (format[*i] != '.')
 		return ;
 	(*i)++;
-	if (fmt[*i] == '*')
+	if (format[*i] == '*')
 	{
 		nb = (int)va_arg(*ap, int);
 		if (nb < 0)
@@ -63,11 +63,11 @@ void	setstore_precision(t_store *store, const char *fmt, size_t *i, va_list *ap)
 		(*i)++;
 		store->prec = nb;
 	}
-	else if ('0' <= fmt[*i] && fmt[*i] <= '9')
+	else if ('0' <= format[*i] && format[*i] <= '9')
 	{
-		while ('0' <= fmt[*i] && fmt[*i] <= '9')
+		while ('0' <= format[*i] && format[*i] <= '9')
 		{
-			nb = nb * 10 + (fmt[*i] - '0');
+			nb = nb * 10 + (format[*i] - '0');
 			(*i)++;
 		}
 		store->prec = nb;
@@ -76,32 +76,32 @@ void	setstore_precision(t_store *store, const char *fmt, size_t *i, va_list *ap)
 		store->prec = DOT_ONLY;
 }
 
-int	percent_appeared(const char *fmt, size_t *i, va_list *ap)
+int	percent_appeared(const char *format, size_t *i, va_list *ap)
 {
 	t_store	store;
 
 	initialize_store(&store);
 	(*i)++;
-	while (fmt[*i] == '0')
+	while (format[*i] == '0')
 	{
 		store.flag = ZERO;
 		(*i)++;
 	}
-	while (fmt[*i] == '-' || fmt[*i] == '0')
+	while (format[*i] == '-' || format[*i] == '0')
 	{
 		store.flag = HYPHEN;
 		(*i)++;
 	}
-	setstore_width(&store, fmt, i, ap);
-	setstore_precision(&store, fmt, i, ap);
-	store.spec = is_specifier(fmt[*i]);
+	setstore_width(&store, format, i, ap);
+	setstore_precision(&store, format, i, ap);
+	store.spec = is_specifier(format[*i]);
 	if (store.spec == -1)
 		return (-1);
 	put_arg(&store, ap);
 	return (store.putnum);
 }
 
-int	ft_printf(const char *fmt, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list		ap;
 	size_t		i;
@@ -110,13 +110,13 @@ int	ft_printf(const char *fmt, ...)
 
 	i = 0;
 	put_num = 0;
-	va_start(ap, fmt);
-	while (fmt[i])
+	va_start(ap, format);
+	while (format[i])
 	{
-		if (fmt[i] == '%')
-			ret = percent_appeared(fmt, &i, &ap);
+		if (format[i] == '%')
+			ret = percent_appeared(format, &i, &ap);
 		else
-			ret = write(1, &fmt[i], 1);
+			ret = write(1, &format[i], 1);
 		if (ret == -1)
 			break ;
 		put_num += ret;

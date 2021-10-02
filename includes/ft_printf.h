@@ -48,10 +48,10 @@ typedef struct s_store
 
 // start.c
 void	put_arg(t_store *store, va_list *ap);
-void	setstore_width(t_store *store, const char *fmt, size_t *i, va_list *ap);
-void	setstore_precision(t_store *store, const char *fmt, size_t *i, va_list *ap);
-int		percent_appeared(const char *fmt, size_t *i, va_list *ap);
-int		ft_printf(const char *fmt, ...);
+void	setstore_width(t_store *store, const char *format, size_t *i, va_list *ap);
+void	setstore_precision(t_store *store, const char *format, size_t *i, va_list *ap);
+int		percent_appeared(const char *format, size_t *i, va_list *ap);
+int		ft_printf(const char *format, ...);
 
 // pretreate_to_put.c
 void	route_char(t_store *store, va_list *ap, void (*put[])(t_store *, char));
