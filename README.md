@@ -1,5 +1,5 @@
 # Description
-This is a ft_printf program that reproduces libc's printf function.  
+ft_printf is the program that reproduces libc's printf function.  
 `int	ft_printf(const char *format, ...);`
 - Interpret the following format rules.  
 `%[flags][minimum field width].[precision][conversion specifier]`  
@@ -9,6 +9,26 @@ This is a ft_printf program that reproduces libc's printf function.
     'cspdiuxX%'
 
 # Usage  
-Type "make" in this repository.  
-Then, the library libftprintf.a will be created.  
-You can use ft_printf function by including ft_printf.h and compiling your code with libftprintf.a.
+## Build libftprintf.a (the library name of ft_printf)  
+```
+git clone "URL"
+cd ft_printf
+make
+```
+## Use
+include ft_printf.h and compile your code with libftprintf.a.
+#### sample code
+```
+#include "ft_printf.h"
+
+int main(void)
+{
+    ft_printf("%010.5d\n", 42);
+    return (0);
+}
+```
+#### compile and execute  
+```
+gcc "sample code file name" libftprintf.a
+./a.out
+```
